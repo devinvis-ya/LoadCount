@@ -1,0 +1,60 @@
+<h2>Какой визуальный стиль вам нравится?</h2>
+<p class="subtitle">Выберите общее направление дизайна для страницы со счётчиком</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0;">
+      <div style="text-align: center;">
+        <div style="font-size: 48px; font-weight: 800; background: linear-gradient(90deg, #a78bfa, #818cf8, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: monospace;">1,247,893</div>
+        <div style="color: #a5b4fc; font-size: 14px; margin-top: 8px; letter-spacing: 3px; text-transform: uppercase;">visits</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Dark & Cosmic</h3>
+      <p>Тёмный фон с градиентами, неоновые акценты, космическая атмосфера. Современно и впечатляюще.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #fafaf9; height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0; border-bottom: 1px solid #e7e5e4;">
+      <div style="text-align: center;">
+        <div style="font-size: 48px; font-weight: 300; color: #1c1917; font-family: 'Georgia', serif; letter-spacing: -2px;">1,247,893</div>
+        <div style="width: 40px; height: 2px; background: #1c1917; margin: 12px auto;"></div>
+        <div style="color: #78716c; font-size: 13px; letter-spacing: 2px; text-transform: uppercase;">page visits</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Minimal & Clean</h3>
+      <p>Светлый фон, много воздуха, типографика в центре внимания. Элегантно и спокойно.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: #0a0a0a; height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0; overflow: hidden; position: relative;">
+      <div style="position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(0,255,136,0.03) 30px, rgba(0,255,136,0.03) 31px);"></div>
+      <div style="text-align: center; position: relative;">
+        <div style="font-size: 48px; font-weight: 700; color: #00ff88; font-family: 'Courier New', monospace; text-shadow: 0 0 20px rgba(0,255,136,0.5);">1247893</div>
+        <div style="color: #00ff8866; font-size: 12px; margin-top: 8px; font-family: monospace;">$ curl visits.count</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Terminal / Hacker</h3>
+      <p>Стиль терминала, зелёный текст на чёрном, моноширинный шрифт. Гиковский и технический.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="d" onclick="toggleSelect(this)">
+    <div class="card-image" style="background: linear-gradient(135deg, #667eea, #764ba2); height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 8px 8px 0 0;">
+      <div style="text-align: center;">
+        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 20px; padding: 24px 40px; border: 1px solid rgba(255,255,255,0.2);">
+          <div style="font-size: 48px; font-weight: 700; color: white; font-family: system-ui;">1,247,893</div>
+          <div style="color: rgba(255,255,255,0.8); font-size: 14px; margin-top: 4px;">total visits</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Glassmorphism</h3>
+      <p>Яркие градиенты, стеклянные карточки с размытием, мягкие тени. Трендовый и сочный.</p>
+    </div>
+  </div>
+</div>
