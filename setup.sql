@@ -18,25 +18,36 @@ CREATE OR REPLACE FUNCTION increment_visits(is_bot boolean DEFAULT false)
 RETURNS json
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
-  result json;
+  result record;
 BEGIN
   IF is_bot THEN
-    UPDATE visits SET count = count + 1, bots = bots + 1 WHERE id = 1;
+    UPDATE visits SET count = count + 1, bots = bots + 1 WHERE id = 1
+    RETURNING count, bots INTO result;
   ELSE
-    UPDATE visits SET count = count + 1 WHERE id = 1;
+    UPDATE visits SET count = count + 1 WHERE id = 1
+    RETURNING count, bots INTO result;
   END IF;
 
-  SELECT json_build_object('count', v.count, 'bots', v.bots)
-  INTO result
-  FROM visits v WHERE v.id = 1;
-
-  RETURN result;
+  RETURN json_build_object('count', result.count, 'bots', result.bots);
 END;
 $$;
 
--- 4. Lock down direct table access, allow only RPC
+-- 4. Create correction function for behavioral bot detection
+CREATE OR REPLACE FUNCTION increment_bots_only()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  UPDATE visits SET bots = bots + 1 WHERE id = 1;
+END;
+$$;
+
+-- 5. Lock down direct table access, allow only RPC
 ALTER TABLE visits ENABLE ROW LEVEL SECURITY;
 
 -- Deny all direct access (anon role)
@@ -44,5 +55,6 @@ CREATE POLICY "No direct access" ON visits
   FOR ALL TO anon
   USING (false);
 
--- 5. Grant execute on the function to anon
+-- 6. Grant execute on the functions to anon
 GRANT EXECUTE ON FUNCTION increment_visits(boolean) TO anon;
+GRANT EXECUTE ON FUNCTION increment_bots_only() TO anon;

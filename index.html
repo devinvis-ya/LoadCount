@@ -26,6 +26,7 @@
       width: 100%;
       height: 100%;
       z-index: 0;
+      pointer-events: none;
     }
 
     .container {
@@ -208,10 +209,19 @@
       const visitorMsg = document.getElementById('visitor-msg');
       const breakdownEl = document.getElementById('breakdown');
 
-      const isBotPromise = detectBot();
-      const isBot = await isBotPromise;
+      // Check UA immediately — if bot, send right away
+      const ua = navigator.userAgent.toLowerCase();
+      const botPatterns = [
+        'bot', 'crawl', 'spider', 'slurp', 'ia_archiver',
+        'facebookexternalhit', 'twitterbot', 'linkedinbot',
+        'whatsapp', 'telegrambot', 'googlebot', 'bingbot',
+        'yandexbot', 'baiduspider', 'duckduckbot', 'semrush',
+        'ahrefs', 'mj12bot', 'dotbot', 'petalbot',
+      ];
+      const isUaBot = botPatterns.some((p) => ua.includes(p));
 
-      const { data, error } = await supabase.rpc('increment_visits', { is_bot: isBot });
+      // Fire RPC immediately (assume human unless UA says bot)
+      const { data, error } = await supabase.rpc('increment_visits', { is_bot: isUaBot });
 
       if (error) {
         console.error('Supabase error:', error);
@@ -233,6 +243,17 @@
       }, 2100);
 
       breakdownEl.textContent = `People: ${peopleCount.toLocaleString('en-US')} \u00b7 Bots: ${botCount.toLocaleString('en-US')}`;
+
+      // If UA was clean, run behavioral check in background
+      // and correct the bot count if no interaction detected
+      if (!isUaBot) {
+        const isBot = await detectBot();
+        if (isBot) {
+          // Correct: increment bots count (visit already counted)
+          await supabase.rpc('increment_bots_only');
+          breakdownEl.textContent = `People: ${(peopleCount - 1).toLocaleString('en-US')} \u00b7 Bots: ${(botCount + 1).toLocaleString('en-US')}`;
+        }
+      }
     })();
 
     // Breakdown Reveal
