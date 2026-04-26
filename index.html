@@ -199,10 +199,10 @@
     }
 
     // Supabase Init + Main Flow
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    const SUPABASE_URL = 'https://brcnwdccnmxlmkqkgxke.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJyY253ZGNjbm14bG1rcWtneGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMzI0OTcsImV4cCI6MjA5MjgwODQ5N30.TDUMLZurGP4HEbkubgsfoVUVTfL6gRC3JexFggghFk8';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     (async function main() {
       const counterEl = document.getElementById('counter');
@@ -221,7 +221,7 @@
       const isUaBot = botPatterns.some((p) => ua.includes(p));
 
       // Fire RPC immediately (assume human unless UA says bot)
-      const { data, error } = await supabase.rpc('increment_visits', { is_bot: isUaBot });
+      const { data, error } = await db.rpc('increment_visits', { is_bot: isUaBot });
 
       if (error) {
         console.error('Supabase error:', error);
@@ -250,7 +250,7 @@
         const isBot = await detectBot();
         if (isBot) {
           // Correct: increment bots count (visit already counted)
-          await supabase.rpc('increment_bots_only');
+          await db.rpc('increment_bots_only');
           breakdownEl.textContent = `People: ${(peopleCount - 1).toLocaleString('en-US')} \u00b7 Bots: ${(botCount + 1).toLocaleString('en-US')}`;
         }
       }
